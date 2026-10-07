@@ -1,0 +1,16 @@
+{
+  "name": "flight-control-review",
+  "version": "1.0.0",
+  "description": "飞控维护脚本令牌移交复核服务（受限 DSL：令牌声明/consume/let/匿名函数/调用/if）",
+  "private": true,
+  "scripts": {
+    "start": "node src/server.js",
+    "build": "node scripts/build.js",
+    "test": "node test/core.test.js",
+    "verify": "./verify"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED"
+}
