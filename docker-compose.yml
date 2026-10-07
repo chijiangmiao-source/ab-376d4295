@@ -1,0 +1,37 @@
+services:
+  web:
+    build: .
+    image: token-handoff-review:latest
+    container_name: token-handoff-review
+    environment:
+      # 容器内固定监听 8080；宿主端口可经 HOST_PORT 配置
+      PORT: "8080"
+      HOST: "0.0.0.0"
+      DATA_FILE: /app/data/conclusions.json
+    ports:
+      # 操作员经可配置宿主端口访问复核页与健康端点：
+      #   HOST_PORT=9090 docker compose up -d
+      - "${HOST_PORT:-8080}:8080"
+    volumes:
+      - review-data:/app/data
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  # 一次性验收服务：先代码测试，再构建，最后 API/HTTP 冒烟，以退出码报告结果。
+  #   docker compose --profile acceptance run --rm --build verify
+  verify:
+    build: .
+    image: token-handoff-review:latest
+    profiles: ["acceptance"]
+    environment:
+      DATA_FILE: /app/data/verify-conclusions.json
+    volumes:
+      - review-data:/app/data
+    entrypoint: ["sh", "scripts/verify.sh"]
+
+volumes:
+  review-data:

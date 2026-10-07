@@ -1,0 +1,16 @@
+{
+  "name": "token-handoff-review",
+  "version": "1.0.0",
+  "description": "飞控令牌移交受限脚本复核服务",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test test/",
+    "build": "sh scripts/build.sh",
+    "verify": "sh scripts/verify.sh"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
